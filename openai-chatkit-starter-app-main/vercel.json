@@ -1,36 +1,16 @@
 {
-  "version": 2,
-  "name": "agentkit-amazing",
-  "builds": [
+  "buildCommand": "cd managed-chatkit/frontend && npm install && npm run build",
+  "outputDirectory": "managed-chatkit/frontend/dist",
+  "installCommand": "npm install",
+  "framework": null,
+  "rewrites": [
     {
-      "src": "managed-chatkit/frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "managed-chatkit/frontend/dist"
-      }
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
     },
     {
-      "src": "managed-chatkit/backend/app/main.py",
-      "use": "@vercel/python"
+      "source": "/health",
+      "destination": "/api/index.py"
     }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "managed-chatkit/backend/app/main.py"
-    },
-    {
-      "src": "/health",
-      "dest": "managed-chatkit/backend/app/main.py"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "managed-chatkit/frontend/dist/$1"
-    }
-  ],
-  "env": {
-    "OPENAI_API_KEY": "@openai-api-key",
-    "CHATKIT_WORKFLOW_ID": "@chatkit-workflow-id",
-    "ENVIRONMENT": "production"
-  }
+  ]
 }
