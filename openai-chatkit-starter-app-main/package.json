@@ -1,0 +1,14 @@
+{
+  "name": "agentkit-amazing",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix managed-chatkit run dev",
+    "build": "npm --prefix managed-chatkit/frontend install && npm --prefix managed-chatkit/frontend run build",
+    "vercel-build": "npm --prefix managed-chatkit/frontend install && npm --prefix managed-chatkit/frontend run build"
+  },
+  "engines": {
+    "node": ">=18.18",
+    "npm": ">=9"
+  }
+}

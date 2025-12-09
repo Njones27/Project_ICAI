@@ -1,0 +1,31 @@
+# Development files
+node_modules
+*.log
+.DS_Store
+
+# Environment files (use Vercel environment variables instead)
+.env
+.env.local
+
+# Git
+.git
+.gitignore
+
+# Documentation
+LICENSE
+
+# Alternative implementation (not needed for deployment)
+chatkit
+
+# Python cache
+__pycache__
+*.pyc
+*.pyo
+.pytest_cache
+.mypy_cache
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
