@@ -41,31 +41,57 @@ This guide will help you configure the form widget with a working save button in
      }
      ```
 
-### 2.2 Update Agent Instructions
+### 2.2 Enable Widget Responses (CRITICAL!)
+
+**This is the most important step!**
+
+1. In the agent settings, look for **"Response Type"**, **"Output Format"**, or **"Response Mode"**
+2. Change from **"Text Only"** to one of:
+   - **"Widget"**
+   - **"Structured + Widget"**
+   - **"Widget Response"**
+3. **Enable "Widget Support"** checkbox if available
+4. **Save this setting**
+
+⚠️ **If you skip this step, the agent will only return text, not the form!**
+
+### 2.3 Update Agent Instructions
 
 Update the agent instructions to:
 
 ```
-Your job is to welcome the user to the Innovation Center. This is a 3D printing maker space, and if the user has a question tell them to ask a staff member.
+You are a helpful assistant for the Innovation Center, a 3D printing maker space.
 
-When the user first messages you:
+CRITICAL: You MUST respond with a form widget, not text instructions.
+
+When the user first contacts you:
 1. Welcome them to the Innovation Center
-2. Show them a form to log their 3D print using a Card widget
-3. The form should collect: Name, Email, Weight (grams), Time (minutes), and Payment status
+2. Extract their student ID from their message
+3. IMMEDIATELY return a Card widget containing a Form
 
-When the user submits the form:
-1. Extract all form fields
-2. Return a structured JSON object with these exact field names:
-   - defaultName (string)
-   - defaultEmail (string)
-   - defaultGrams (string)
-   - defaultTimeMin (string)
-   - defaultPaid (boolean)
+The form widget must include:
+- A welcome message
+- Input fields for: Name, Email, Grams, TimeMin
+- A checkbox for Paid
+- A "Save" button with submit=true
 
-Always validate that the email is in proper format and all required fields are filled.
+When the form is submitted:
+1. Extract all form field values
+2. Return structured JSON matching this exact schema:
+   {
+     "defaultName": string,
+     "defaultEmail": string,
+     "defaultGrams": string,
+     "defaultTimeMin": string,
+     "defaultPaid": boolean
+   }
+
+If user asks questions, tell them to ask a staff member.
+
+REMEMBER: Return widgets, not text prompts asking for information!
 ```
 
-### 2.3 Add Widget Response
+### 2.4 Add Widget Response
 
 1. In the agent configuration, find the **"Widget Response"** or **"Response Template"** section
 2. Set the response type to **"Widget"**
