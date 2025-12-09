@@ -1,0 +1,146 @@
+{
+  "type": "Card",
+  "title": "3D Print Log Form",
+  "children": [
+    {
+      "type": "Text",
+      "value": "Welcome to the Innovation Center! This is a 3D printing maker space. If you have any questions, please ask a staff member.",
+      "size": "md",
+      "weight": "normal"
+    },
+    {
+      "type": "Text",
+      "value": "Please fill out the form below to log your 3D print:",
+      "size": "sm",
+      "weight": "medium"
+    },
+    {
+      "type": "Form",
+      "direction": "col",
+      "children": [
+        {
+          "type": "Box",
+          "direction": "col",
+          "gap": "xs",
+          "children": [
+            {
+              "type": "Label",
+              "value": "Name *",
+              "fieldName": "defaultName",
+              "size": "sm",
+              "weight": "medium"
+            },
+            {
+              "type": "Input",
+              "name": "defaultName",
+              "placeholder": "Enter your full name",
+              "required": true,
+              "variant": "outline",
+              "size": "md"
+            }
+          ]
+        },
+        {
+          "type": "Box",
+          "direction": "col",
+          "gap": "xs",
+          "children": [
+            {
+              "type": "Label",
+              "value": "Email *",
+              "fieldName": "defaultEmail",
+              "size": "sm",
+              "weight": "medium"
+            },
+            {
+              "type": "Input",
+              "name": "defaultEmail",
+              "inputType": "email",
+              "placeholder": "your.email@example.com",
+              "required": true,
+              "variant": "outline",
+              "size": "md"
+            }
+          ]
+        },
+        {
+          "type": "Box",
+          "direction": "col",
+          "gap": "xs",
+          "children": [
+            {
+              "type": "Label",
+              "value": "Material Used (grams) *",
+              "fieldName": "defaultGrams",
+              "size": "sm",
+              "weight": "medium"
+            },
+            {
+              "type": "Input",
+              "name": "defaultGrams",
+              "inputType": "number",
+              "placeholder": "Enter weight in grams",
+              "required": true,
+              "variant": "outline",
+              "size": "md"
+            }
+          ]
+        },
+        {
+          "type": "Box",
+          "direction": "col",
+          "gap": "xs",
+          "children": [
+            {
+              "type": "Label",
+              "value": "Print Time (minutes) *",
+              "fieldName": "defaultTimeMin",
+              "size": "sm",
+              "weight": "medium"
+            },
+            {
+              "type": "Input",
+              "name": "defaultTimeMin",
+              "inputType": "number",
+              "placeholder": "Enter time in minutes",
+              "required": true,
+              "variant": "outline",
+              "size": "md"
+            }
+          ]
+        },
+        {
+          "type": "Box",
+          "direction": "row",
+          "gap": "sm",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "Checkbox",
+              "name": "defaultPaid",
+              "label": "Payment completed",
+              "defaultChecked": false
+            }
+          ]
+        },
+        {
+          "type": "Box",
+          "direction": "row",
+          "gap": "md",
+          "justifyContent": "end",
+          "marginTop": "md",
+          "children": [
+            {
+              "type": "Button",
+              "label": "Save",
+              "submit": true,
+              "style": "primary",
+              "color": "blue",
+              "size": "md"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
