@@ -93,6 +93,62 @@ async def create_session(request: Request) -> JSONResponse:
     )
 
 
+@app.post("/api/actions/lab.job.save")
+async def save_print_job(request: Request) -> JSONResponse:
+    """Handle 3D print job form submission from ChatKit widget."""
+    body = await read_json_body(request)
+
+    # Extract form data from the action payload
+    # ChatKit sends actions with this structure: { action: { type, payload }, form_data: {...} }
+    form_data = body.get("form_data", {}) or body
+
+    # Extract user information
+    user_data = form_data.get("user", {})
+    name = user_data.get("name", "")
+    email = user_data.get("email", "")
+
+    # Extract job information
+    job_data = form_data.get("job", {})
+    grams = job_data.get("grams")
+    time_min = job_data.get("timeMin")
+    paid = job_data.get("paid", False)
+
+    # Validate required fields
+    if not name or not email:
+        return JSONResponse(
+            {"error": "Name and email are required"},
+            status_code=400
+        )
+
+    if grams is None or time_min is None:
+        return JSONResponse(
+            {"error": "Grams and time are required"},
+            status_code=400
+        )
+
+    # Get user/session ID from cookies
+    user_id, _ = resolve_user(request.cookies)
+
+    # TODO: Save to database
+    # For now, just log the data
+    print(f"[3D Print Job] User: {name} ({email})")
+    print(f"[3D Print Job] Material: {grams}g, Time: {time_min}min, Paid: {paid}")
+    print(f"[3D Print Job] Session: {user_id}")
+
+    # Return success response
+    return JSONResponse({
+        "success": True,
+        "message": f"Print job logged successfully for {name}",
+        "data": {
+            "name": name,
+            "email": email,
+            "grams": grams,
+            "timeMin": time_min,
+            "paid": paid
+        }
+    })
+
+
 def respond(
     payload: Mapping[str, Any], status_code: int, cookie_value: str | None = None
 ) -> JSONResponse:
