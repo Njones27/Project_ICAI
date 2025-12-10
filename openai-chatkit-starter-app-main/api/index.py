@@ -126,57 +126,55 @@ async def handle_order_submit(request: Request) -> JSONResponse:
     print(f"[Print Job Submitted] Material: {grams}g, Time: {time}, Paid: {paid}")
     print(f"[Print Job Submitted] Session: {user_id}")
 
-    # Return confirmation widget directly
-    # The workflow will process this data when needed
+    # Return confirmation widget in format expected by ChatKit client actions
     return JSONResponse({
-        "type": "assistant_message",
-        "widgets": [
-            {
-                "type": "Card",
-                "props": {"size": "sm"},
-                "children": [
-                    {
-                        "type": "Col",
-                        "props": {"gap": 3},
-                        "children": [
-                            {
-                                "type": "Title",
-                                "props": {
-                                    "value": "Print Job Submitted ✓",
-                                    "size": "md"
-                                }
-                            },
-                            {
-                                "type": "Text",
-                                "props": {"value": f"**Name:** {name}"}
-                            },
-                            {
-                                "type": "Text",
-                                "props": {"value": f"**Email:** {email}"}
-                            },
-                            {
-                                "type": "Row",
-                                "props": {"gap": 3},
-                                "children": [
-                                    {
-                                        "type": "Text",
-                                        "props": {"value": f"**Grams:** {grams}"}
-                                    },
-                                    {
-                                        "type": "Text",
-                                        "props": {"value": f"**Time:** {time}"}
-                                    }
-                                ]
-                            },
-                            {
-                                "type": "Text",
-                                "props": {"value": f"**Paid:** {'Yes' if paid else 'No'}"}
+        "success": True,
+        "message": f"Print job submitted for {name}",
+        "widget": {
+            "type": "Card",
+            "props": {"size": "sm"},
+            "children": [
+                {
+                    "type": "Col",
+                    "props": {"gap": 3},
+                    "children": [
+                        {
+                            "type": "Title",
+                            "props": {
+                                "value": "Print Job Submitted ✓",
+                                "size": "md"
                             }
-                        ]
-                    }
-                ]
-            }
-        ]
+                        },
+                        {
+                            "type": "Text",
+                            "props": {"value": f"**Name:** {name}"}
+                        },
+                        {
+                            "type": "Text",
+                            "props": {"value": f"**Email:** {email}"}
+                        },
+                        {
+                            "type": "Row",
+                            "props": {"gap": 3},
+                            "children": [
+                                {
+                                    "type": "Text",
+                                    "props": {"value": f"**Grams:** {grams}"}
+                                },
+                                {
+                                    "type": "Text",
+                                    "props": {"value": f"**Time:** {time}"}
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Text",
+                            "props": {"value": f"**Paid:** {'Yes' if paid else 'No'}"}
+                        }
+                    ]
+                }
+            ]
+        }
     })
 
 
