@@ -93,25 +93,21 @@ async def create_session(request: Request) -> JSONResponse:
     )
 
 
-@app.post("/api/actions/lab.job.save")
-async def save_print_job(request: Request) -> JSONResponse:
-    """Handle 3D print job form submission from ChatKit widget."""
+@app.post("/api/actions/order.submit")
+async def handle_order_submit(request: Request) -> JSONResponse:
+    """Handle 3D print job form submission."""
     body = await read_json_body(request)
 
-    # Extract form data from the action payload
-    # ChatKit sends actions with this structure: { action: { type, payload }, form_data: {...} }
-    form_data = body.get("form_data", {}) or body
+    # Extract form data from action payload
+    # ChatKit actions come in format: { type: "order.submit", payload: {...} }
+    payload = body.get("payload", {})
 
-    # Extract user information
-    user_data = form_data.get("user", {})
-    name = user_data.get("name", "")
-    email = user_data.get("email", "")
-
-    # Extract job information
-    job_data = form_data.get("job", {})
-    grams = job_data.get("grams")
-    time_min = job_data.get("timeMin")
-    paid = job_data.get("paid", False)
+    # Extract form fields
+    name = payload.get("order.name", "")
+    email = payload.get("order.email", "")
+    grams = payload.get("order.grams", "")
+    time = payload.get("order.time", "")
+    paid = payload.get("order.paid", False)
 
     # Validate required fields
     if not name or not email:
@@ -120,32 +116,63 @@ async def save_print_job(request: Request) -> JSONResponse:
             status_code=400
         )
 
-    if grams is None or time_min is None:
-        return JSONResponse(
-            {"error": "Grams and time are required"},
-            status_code=400
-        )
-
-    # Get user/session ID from cookies
+    # Log the submission
     user_id, _ = resolve_user(request.cookies)
+    print(f"[Print Job Submitted] User: {name} ({email})")
+    print(f"[Print Job Submitted] Material: {grams}g, Time: {time}, Paid: {paid}")
+    print(f"[Print Job Submitted] Session: {user_id}")
 
-    # TODO: Save to database
-    # For now, just log the data
-    print(f"[3D Print Job] User: {name} ({email})")
-    print(f"[3D Print Job] Material: {grams}g, Time: {time_min}min, Paid: {paid}")
-    print(f"[3D Print Job] Session: {user_id}")
-
-    # Return success response
+    # Return confirmation widget directly
+    # The workflow will process this data when needed
     return JSONResponse({
-        "success": True,
-        "message": f"Print job logged successfully for {name}",
-        "data": {
-            "name": name,
-            "email": email,
-            "grams": grams,
-            "timeMin": time_min,
-            "paid": paid
-        }
+        "type": "assistant_message",
+        "widgets": [
+            {
+                "type": "Card",
+                "props": {"size": "sm"},
+                "children": [
+                    {
+                        "type": "Col",
+                        "props": {"gap": 3},
+                        "children": [
+                            {
+                                "type": "Title",
+                                "props": {
+                                    "value": "Print Job Submitted ✓",
+                                    "size": "md"
+                                }
+                            },
+                            {
+                                "type": "Text",
+                                "props": {"value": f"**Name:** {name}"}
+                            },
+                            {
+                                "type": "Text",
+                                "props": {"value": f"**Email:** {email}"}
+                            },
+                            {
+                                "type": "Row",
+                                "props": {"gap": 3},
+                                "children": [
+                                    {
+                                        "type": "Text",
+                                        "props": {"value": f"**Grams:** {grams}"}
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "props": {"value": f"**Time:** {time}"}
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "Text",
+                                "props": {"value": f"**Paid:** {'Yes' if paid else 'No'}"}
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
     })
 
 

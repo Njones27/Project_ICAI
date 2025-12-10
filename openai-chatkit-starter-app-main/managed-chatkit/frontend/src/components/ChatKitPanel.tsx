@@ -12,40 +12,39 @@ export function ChatKitPanel() {
   const handleAction = useCallback(async (action: any) => {
     const actionType = action?.type;
 
-    if (actionType === "lab.job.save") {
+    if (actionType === "order.submit") {
       // Extract form data from the action payload
       const formData = action.payload || {};
 
       try {
         // Send to backend API
-        const response = await fetch("/api/actions/lab.job.save", {
+        const response = await fetch("/api/actions/order.submit", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ form_data: formData }),
+          body: JSON.stringify({ payload: formData }),
         });
 
         const result = await response.json();
 
         if (!response.ok) {
-          console.error("Failed to save print job:", result.error);
+          console.error("Failed to submit print job:", result.error);
           return {
             success: false,
-            message: result.error || "Failed to save print job",
+            message: result.error || "Failed to submit print job",
           };
         }
 
-        console.log("Print job saved successfully:", result);
-        return {
-          success: true,
-          message: result.message,
-        };
+        console.log("Print job submitted successfully:", result);
+
+        // Return the widgets from the backend response
+        return result;
       } catch (error) {
-        console.error("Error saving print job:", error);
+        console.error("Error submitting print job:", error);
         return {
           success: false,
-          message: "Network error while saving print job",
+          message: "Network error while submitting print job",
         };
       }
     }
