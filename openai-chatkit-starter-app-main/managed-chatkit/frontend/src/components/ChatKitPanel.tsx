@@ -12,12 +12,14 @@ export function ChatKitPanel() {
   const handleAction = useCallback(async (action: any) => {
     const actionType = action?.type;
 
-    console.log("[DEBUG] Action received:", action);
+    console.log("[DEBUG] Action received:", JSON.stringify(action, null, 2));
 
     if (actionType === "order.submit") {
       // Extract form data from the action payload
       const formData = action.payload || {};
-      console.log("[DEBUG] Form data:", formData);
+      console.log("[DEBUG] Form data:", JSON.stringify(formData, null, 2));
+      console.log("[DEBUG] Action keys:", Object.keys(action));
+      console.log("[DEBUG] Payload keys:", Object.keys(formData));
 
       try {
         // Send to backend API
