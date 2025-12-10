@@ -102,15 +102,16 @@ async def handle_order_submit(request: Request) -> JSONResponse:
     print(f"[DEBUG] Full request body: {json.dumps(body, indent=2)}")
 
     # Extract form data from action payload
-    # ChatKit actions come in format: { type: "order.submit", payload: {...} }
+    # ChatKit actions come in format: { payload: { order: {...} } }
     payload = body.get("payload", {})
+    order_data = payload.get("order", {})
 
-    # Extract form fields
-    name = payload.get("order.name", "")
-    email = payload.get("order.email", "")
-    grams = payload.get("order.grams", "")
-    time = payload.get("order.time", "")
-    paid = payload.get("order.paid", False)
+    # Extract form fields from nested order object
+    name = order_data.get("name", "")
+    email = order_data.get("email", "")
+    grams = order_data.get("grams", "")
+    time = order_data.get("time", "")
+    paid = order_data.get("paid", False)
 
     # Validate required fields
     if not name or not email:
