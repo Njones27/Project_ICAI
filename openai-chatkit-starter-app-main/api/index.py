@@ -98,6 +98,9 @@ async def handle_order_submit(request: Request) -> JSONResponse:
     """Handle 3D print job form submission."""
     body = await read_json_body(request)
 
+    # Debug: Log the entire request body
+    print(f"[DEBUG] Full request body: {json.dumps(body, indent=2)}")
+
     # Extract form data from action payload
     # ChatKit actions come in format: { type: "order.submit", payload: {...} }
     payload = body.get("payload", {})
